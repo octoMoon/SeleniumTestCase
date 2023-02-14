@@ -32,11 +32,17 @@ public class LoginTest {
     }
 
     @Test
-    public void loginTest(){
+    public void loginTest() throws InterruptedException {
         loginPage.onClickCustomerButton();
         customerPage.inputLogin(ConfigProperties.getProperties("login"));
         customerPage.onClickLoginButton();
         String user = accountPage.getUsername();
+        accountPage.getBalance();
+        accountPage.commitDeposit();
+        accountPage.getBalance();
+        accountPage.commitWithdraw();
+        accountPage.getBalance();
+        accountPage.getTransactions();
         Assert.assertEquals(ConfigProperties.getProperties("login"), user);
     }
 
