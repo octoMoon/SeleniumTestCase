@@ -1,15 +1,13 @@
+package pages;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage {
-    ////*[@id="userSelect"]
-    @FindBy(xpath = "//*[@id='userSelect']")
-    private WebElement loginUsername;
-
-    @FindBy(xpath = "//*[contains(text(), 'Login')]")
-    private WebElement loginButton;
+    @FindBy(xpath = "//html/body/div/div/div[2]/div/div[1]/div[1]/button")
+    private WebElement customerButton;
 
     public WebDriver webDriver;
 
@@ -18,11 +16,7 @@ public class LoginPage {
         this.webDriver = webDriver;
     }
 
-    public void inputLogin(String login){
-        loginUsername.sendKeys(login);
-    }
-
-    public void onClickLoginButton(){
-        loginButton.click();
-    }
+public void onClickCustomerButton(){
+        customerButton.click();
+}
 }

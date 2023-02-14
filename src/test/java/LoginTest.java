@@ -4,6 +4,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.AccountPage;
+import pages.CustomerPage;
+import pages.LoginPage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginTest {
 
     public static AccountPage accountPage;
+    public static CustomerPage customerPage;
     public static LoginPage loginPage;
     public static WebDriver webDriver;
 
@@ -23,13 +27,15 @@ public class LoginTest {
         webDriver.get(ConfigProperties.getProperties("loginpage"));
 
         accountPage = new AccountPage(webDriver);
+        customerPage = new CustomerPage(webDriver);
         loginPage = new LoginPage(webDriver);
     }
 
     @Test
     public void loginTest(){
-        loginPage.inputLogin(ConfigProperties.getProperties("login"));
-        loginPage.onClickLoginButton();
+        loginPage.onClickCustomerButton();
+        customerPage.inputLogin(ConfigProperties.getProperties("login"));
+        customerPage.onClickLoginButton();
         String user = accountPage.getUsername();
         Assert.assertEquals(ConfigProperties.getProperties("login"), user);
     }
