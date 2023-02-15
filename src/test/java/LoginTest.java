@@ -18,6 +18,8 @@ public class LoginTest {
     public static LoginPage loginPage;
     public static WebDriver webDriver;
 
+    public static ReportWriter reportWriter;
+
     @BeforeClass
     public static void configure(){
         System.setProperty("webdriver.chrome.driver", ConfigProperties.getProperties("chromedriver"));
@@ -29,6 +31,7 @@ public class LoginTest {
         accountPage = new AccountPage(webDriver);
         customerPage = new CustomerPage(webDriver);
         loginPage = new LoginPage(webDriver);
+        reportWriter = new ReportWriter();
     }
 
     @Test
@@ -44,6 +47,7 @@ public class LoginTest {
         accountPage.getBalance();
         accountPage.getTransactions();
         Assert.assertEquals(ConfigProperties.getProperties("login"), user);
+        reportWriter.csvReport();
     }
 
     @AfterClass

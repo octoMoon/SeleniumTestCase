@@ -85,7 +85,7 @@ public class AccountPage {
 
     public void getTransactions(){
         transactionMenuButton.click();
-        System.out.println(transactions.getText());
+       // String data = transactions.getText();
     }
 
 
