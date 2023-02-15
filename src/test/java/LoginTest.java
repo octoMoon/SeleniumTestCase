@@ -4,10 +4,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.AccountPage;
 import pages.CustomerPage;
 import pages.LoginPage;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 
@@ -17,13 +22,21 @@ public class LoginTest {
     public static CustomerPage customerPage;
     public static LoginPage loginPage;
     public static WebDriver webDriver;
+    public static ChromeOptions chromeOptions;
 
     public static ReportWriter reportWriter;
 
     @BeforeClass
-    public static void configure(){
+    public static void configure() throws MalformedURLException {
         System.setProperty("webdriver.chrome.driver", ConfigProperties.getProperties("chromedriver"));
-        webDriver = new ChromeDriver();
+
+        chromeOptions = new ChromeOptions();
+        chromeOptions.setCapability("browserName", "chrome");
+        chromeOptions.setCapability("platformName", "LINUX");
+        chromeOptions.setCapability("se:name", "LoginTest");
+        chromeOptions.setCapability("se:sampleMetadata", "Sample metadata value");
+
+        webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), chromeOptions);
         webDriver.manage().window().maximize();
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.get(ConfigProperties.getProperties("loginpage"));
