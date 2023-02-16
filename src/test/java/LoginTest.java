@@ -13,6 +13,7 @@ import pages.TransactionPage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,7 +54,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginTest() throws InterruptedException {
+    public void loginTest() throws InterruptedException, ParseException {
         loginPage.onClickCustomerButton();
         customerPage.inputLogin(ConfigProperties.getProperties("login"));
         customerPage.onClickLoginButton();
@@ -61,7 +62,7 @@ public class LoginTest {
         accountPage.commitWithdraw();
         balanceCheck(0, accountPage.getBalance());
         accountPage.getTransactions();
-        transactionPage.test();
+        reportWriter.csvReport(transactionPage.getTransactions());
     }
 
     @AfterClass
