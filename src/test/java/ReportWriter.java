@@ -10,7 +10,7 @@ import java.util.Date;
 public class ReportWriter {
 
     public File csvReport(ArrayList<String> data) {
-        File report = new File("report.csv");
+        File report = new File("src/test/resources/report.csv");
         try {
             PrintWriter out = new PrintWriter(report);
             out.println(data.get(0).toString());

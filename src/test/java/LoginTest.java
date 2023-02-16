@@ -1,5 +1,7 @@
 
+import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
+import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -14,6 +16,8 @@ import pages.TransactionPage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +44,11 @@ public class LoginTest {
     @Step
     public static void transactionCheck(ArrayList<String> expected, ArrayList<String> actuals) {
         Assert.assertEquals(expected, actuals);
+    }
+
+   @Attachment
+    public static byte[] getReportToAllure() throws IOException {
+        return Files.readAllBytes(Paths.get("src/test/resources", "report.csv"));
     }
 
     @BeforeClass
@@ -71,7 +80,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginTest() throws InterruptedException, ParseException {
+    public void loginTest() throws InterruptedException, ParseException, IOException {
         loginPage.onClickCustomerButton();
         customerPage.inputLogin(ConfigProperties.getProperties("login"));
         customerPage.onClickLoginButton();
@@ -85,6 +94,7 @@ public class LoginTest {
         transactionList = reportWriter.refactorTransaction(transactionPage.getTransactions());
         transactionCheck(transactionList, expectedList);
         reportWriter.csvReport(transactionList);
+        getReportToAllure();
     }
 
     @AfterClass
