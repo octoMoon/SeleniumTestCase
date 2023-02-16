@@ -9,8 +9,6 @@ import java.time.LocalDate;
 
 
 public class AccountPage {
-    @FindBy(xpath = "//html/body/div/div/div[2]/div/form/div/select/option[3]")
-    private WebElement username;
     @FindBy(xpath = "//html/body/div/div/div[2]/div/div[3]/button[2]")
     private WebElement depositMenuButton;
     @FindBy(xpath = "//html/body/div/div/div[2]/div/div[3]/button[3]")
@@ -33,13 +31,8 @@ public class AccountPage {
         this.webDriver = webDriver;
     }
 
-    public String getUsername() {
-        return username.getText();
-    }
-
-    public String getBalance(){
-        System.out.println(balance.getText());
-        return balance.getText();
+    public int getBalance(){
+        return Integer.parseInt(balance.getText());
     }
 
     public String nowDateToFibonacci() {
@@ -85,7 +78,6 @@ public class AccountPage {
 
     public void getTransactions(){
         transactionMenuButton.click();
-       // String data = transactions.getText();
     }
 
 

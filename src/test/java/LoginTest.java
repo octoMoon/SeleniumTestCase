@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -23,13 +24,15 @@ public class LoginTest {
     public static TransactionPage transactionPage;
     public static WebDriver webDriver;
     public static ChromeOptions chromeOptions;
-
     public static ReportWriter reportWriter;
+    
+    @Step
+    public static void balanceCheck(int expected, int balance){
+    Assert.assertEquals(expected, balance);
+    }
 
     @BeforeClass
     public static void configure() throws MalformedURLException {
-        System.setProperty("webdriver.chrome.driver", ConfigProperties.getProperties("chromedriver"));
-
         chromeOptions = new ChromeOptions();
         chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("platformName", "LINUX");
@@ -54,16 +57,11 @@ public class LoginTest {
         loginPage.onClickCustomerButton();
         customerPage.inputLogin(ConfigProperties.getProperties("login"));
         customerPage.onClickLoginButton();
-        String user = accountPage.getUsername();
-        accountPage.getBalance();
         accountPage.commitDeposit();
-        accountPage.getBalance();
         accountPage.commitWithdraw();
-        accountPage.getBalance();
+        balanceCheck(0, accountPage.getBalance());
         accountPage.getTransactions();
         transactionPage.test();
-        Assert.assertEquals(ConfigProperties.getProperties("login"), user);
-        //reportWriter.csvReport();
     }
 
     @AfterClass
