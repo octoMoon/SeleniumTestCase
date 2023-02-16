@@ -77,10 +77,10 @@ public class AccountPage {
     public void commitWithdraw() throws InterruptedException {
         String amount = nowDateToFibonacci();
         withdrawMenuButton.click();
-        Thread.sleep(300);
+        Thread.sleep(5000);
         amountEnter(amount);
         enterButton.click();
-        Thread.sleep(1000);
+        Thread.sleep(5000);
     }
 
     public void getTransactions(){

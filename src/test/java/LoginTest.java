@@ -3,13 +3,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.AccountPage;
 import pages.CustomerPage;
 import pages.LoginPage;
+import pages.TransactionPage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,6 +20,7 @@ public class LoginTest {
     public static AccountPage accountPage;
     public static CustomerPage customerPage;
     public static LoginPage loginPage;
+    public static TransactionPage transactionPage;
     public static WebDriver webDriver;
     public static ChromeOptions chromeOptions;
 
@@ -44,6 +44,8 @@ public class LoginTest {
         accountPage = new AccountPage(webDriver);
         customerPage = new CustomerPage(webDriver);
         loginPage = new LoginPage(webDriver);
+        transactionPage = new TransactionPage(webDriver);
+
         reportWriter = new ReportWriter();
     }
 
@@ -59,8 +61,9 @@ public class LoginTest {
         accountPage.commitWithdraw();
         accountPage.getBalance();
         accountPage.getTransactions();
+        transactionPage.test();
         Assert.assertEquals(ConfigProperties.getProperties("login"), user);
-        reportWriter.csvReport();
+        //reportWriter.csvReport();
     }
 
     @AfterClass
