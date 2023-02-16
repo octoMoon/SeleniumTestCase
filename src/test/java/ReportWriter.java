@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -8,12 +9,12 @@ import java.util.Date;
 
 public class ReportWriter {
 
-    public File csvReport(ArrayList<String> data) throws ParseException {
+    public File csvReport(ArrayList<String> data) {
         File report = new File("report.csv");
         try {
             PrintWriter out = new PrintWriter(report);
-            out.println(refactorTransaction(data.get(0).toString()));
-            out.println(refactorTransaction(data.get(1).toString()));
+            out.println(data.get(0).toString());
+            out.println(data.get(1).toString());
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -21,20 +22,31 @@ public class ReportWriter {
 
         return report;
     }
-    
-    public String refactorTransaction(String transaction) throws ParseException{
-         String str = "Feb 16, 2023 1:10:36 PM 987 Credit";
-        int dividend;
-        if (str.contains(" PM ")) {
-            dividend = str.indexOf(" PM ");
-        } else {
-            dividend = str.indexOf(" AM ");
+
+    public ArrayList<String> refactorTransaction(ArrayList<String> transactions) {
+        ArrayList<String> strings = new ArrayList<>();
+
+        for (String transaction : transactions) {
+            int dividend;
+            if (transaction.contains("PM")) {
+                dividend = transaction.indexOf("PM");
+            } else {
+                dividend = transaction.indexOf("AM");
+            }
+            
+            String date = transaction.substring(0, dividend + 2);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a");
+            try {
+                Date currentdate = sdf.parse(date);
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss");                
+                strings.add(sdf2.format(currentdate) +  transaction.substring(dividend+2));
+            } catch (ParseException e) {
+                e.getMessage();
+            }
+
         }
-        String date = transaction.substring(0, dividend);
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
-        Date currentdate = sdf.parse(date);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss");
-        return sdf2.format(currentdate) + str.substring(dividend + 3);
+        return strings;
+
     }
 
 }

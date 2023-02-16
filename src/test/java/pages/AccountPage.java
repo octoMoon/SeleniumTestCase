@@ -60,23 +60,22 @@ public class AccountPage {
         transactionMenuButton.click();
     }
 
-    public void commitDeposit(){
-        String amount = nowDateToFibonacci();
+    public void commitDeposit(String amount){
         depositMenuButton.click();
         amountEnter(amount);
         enterButton.click();
     }
 
-    public void commitWithdraw() throws InterruptedException {
-        String amount = nowDateToFibonacci();
+    public void commitWithdraw(String amount) throws InterruptedException {
         withdrawMenuButton.click();
         Thread.sleep(5000);
         amountEnter(amount);
         enterButton.click();
-        Thread.sleep(5000);
     }
 
-    public void getTransactions(){
+    public void getTransactions()throws InterruptedException{
+                Thread.sleep(5000);
+
         transactionMenuButton.click();
     }
 

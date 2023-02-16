@@ -1,3 +1,4 @@
+
 import io.qameta.allure.Step;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -14,8 +15,8 @@ import pages.TransactionPage;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
 
 public class LoginTest {
 
@@ -26,24 +27,37 @@ public class LoginTest {
     public static WebDriver webDriver;
     public static ChromeOptions chromeOptions;
     public static ReportWriter reportWriter;
-    
+    public static TransactionWriter transactionWriter;
+
+    private static ArrayList<String> expectedList;
+    private static ArrayList<String> transactionList;
+
     @Step
-    public static void balanceCheck(int expected, int balance){
-    Assert.assertEquals(expected, balance);
+    public static void balanceCheck(int expected, int balance) {
+        Assert.assertEquals(expected, balance);
+    }
+
+    @Step
+    public static void transactionCheck(ArrayList<String> expected, ArrayList<String> actuals) {
+        Assert.assertEquals(expected, actuals);
     }
 
     @BeforeClass
-    public static void configure() throws MalformedURLException {
+    public static void configure() {
         chromeOptions = new ChromeOptions();
         chromeOptions.setCapability("browserName", "chrome");
         chromeOptions.setCapability("platformName", "LINUX");
         chromeOptions.setCapability("se:name", "LoginTest");
         chromeOptions.setCapability("se:sampleMetadata", "Sample metadata value");
 
-        webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), chromeOptions);
-        webDriver.manage().window().maximize();
-        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        webDriver.get(ConfigProperties.getProperties("loginpage"));
+        try {
+            webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), chromeOptions);
+            webDriver.manage().window().maximize();
+            webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            webDriver.get(ConfigProperties.getProperties("loginpage"));
+        } catch (MalformedURLException e) {
+            e.getMessage();
+        }
 
         accountPage = new AccountPage(webDriver);
         customerPage = new CustomerPage(webDriver);
@@ -51,6 +65,9 @@ public class LoginTest {
         transactionPage = new TransactionPage(webDriver);
 
         reportWriter = new ReportWriter();
+        transactionWriter = new TransactionWriter();
+
+        expectedList = new ArrayList<>();
     }
 
     @Test
@@ -58,15 +75,20 @@ public class LoginTest {
         loginPage.onClickCustomerButton();
         customerPage.inputLogin(ConfigProperties.getProperties("login"));
         customerPage.onClickLoginButton();
-        accountPage.commitDeposit();
-        accountPage.commitWithdraw();
+        String amount = accountPage.nowDateToFibonacci();
+        accountPage.commitDeposit(amount);
+        expectedList.add(transactionWriter.transactionWrite(amount, "Credit"));
+        accountPage.commitWithdraw(amount);
+        expectedList.add(transactionWriter.transactionWrite(amount, "Debit"));
         balanceCheck(0, accountPage.getBalance());
         accountPage.getTransactions();
-        reportWriter.csvReport(transactionPage.getTransactions());
+        transactionList = reportWriter.refactorTransaction(transactionPage.getTransactions());
+        transactionCheck(transactionList, expectedList);
+        reportWriter.csvReport(transactionList);
     }
 
     @AfterClass
-    public static void tearDown(){
+    public static void tearDown() {
         webDriver.quit();
     }
 
