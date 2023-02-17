@@ -1,14 +1,20 @@
 package pages;
 
+import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.time.LocalDate;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AccountPage {
+
     @FindBy(xpath = "//html/body/div/div/div[2]/div/div[3]/button[2]")
     private WebElement depositMenuButton;
     @FindBy(xpath = "//html/body/div/div/div[2]/div/div[3]/button[3]")
@@ -25,13 +31,16 @@ public class AccountPage {
     private WebElement transactions;
 
     public WebDriver webDriver;
+    public WebDriverWait wait;
 
     public AccountPage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
         this.webDriver = webDriver;
+        this.wait = new WebDriverWait(webDriver, Duration.ofSeconds(4));
+
     }
 
-    public int getBalance(){
+    public int getBalance() {
         return Integer.parseInt(balance.getText());
     }
 
@@ -48,42 +57,36 @@ public class AccountPage {
         return Integer.toString(result);
     }
 
-    public void amountEnter (String amount){
+    public void amountEnter(String amount) {
         amountField.sendKeys(amount);
     }
 
-    public void onClickWithdrawMenu(){
+    public void onClickWithdrawMenu() {
         withdrawMenuButton.click();
     }
 
-    public void onClickTransactionMenu(){
+    public void onClickTransactionMenu() {
         transactionMenuButton.click();
     }
 
-    public void commitDeposit(String amount){
+    public void commitDeposit(String amount) {
         depositMenuButton.click();
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/label"), "Amount to be Deposited :"));
         amountEnter(amount);
         enterButton.click();
     }
 
-    public void commitWithdraw(String amount) throws InterruptedException {
+    public void commitWithdraw(String amount) {
         withdrawMenuButton.click();
-        Thread.sleep(5000);
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/label"), "Amount to be Withdrawn :"));
         amountEnter(amount);
         enterButton.click();
     }
 
-    public void getTransactions()throws InterruptedException{
-                Thread.sleep(5000);
-
+    public void getTransactions() {
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/span"), "Transaction successful"));
         transactionMenuButton.click();
+        
     }
-
-
-
-
-
-
-
 
 }
