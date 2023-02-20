@@ -6,9 +6,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage {
-    @FindBy(xpath = "//html/body/div/div/div[2]/div/div[1]/div[1]/button")
-    private WebElement customerButton;
 
+    @FindBy(xpath = "//*[contains(text(), 'Customer Login')]")
+    private WebElement customerButton;
     public WebDriver webDriver;
 
     public LoginPage(WebDriver webDriver) {
@@ -16,7 +16,7 @@ public class LoginPage {
         this.webDriver = webDriver;
     }
 
-public void onClickCustomerButton(){
+    public void onClickCustomerButton() {
         customerButton.click();
-}
+    }
 }

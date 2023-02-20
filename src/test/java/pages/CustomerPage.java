@@ -12,7 +12,6 @@ public class CustomerPage {
 
     @FindBy(xpath = "//*[contains(text(), 'Login')]")
     private WebElement loginButton;
-
     public WebDriver webDriver;
 
     public CustomerPage(WebDriver webDriver) {
@@ -20,11 +19,11 @@ public class CustomerPage {
         this.webDriver = webDriver;
     }
 
-    public void inputLogin(String login){
+    public void inputLogin(String login) {
         loginUsername.sendKeys(login);
     }
 
-    public void onClickLoginButton(){
+    public void onClickLoginButton() {
         loginButton.click();
     }
 }

@@ -1,8 +1,10 @@
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigProperties {
+
     protected static FileInputStream fileInputStream;
     protected static Properties properties;
 
@@ -23,7 +25,8 @@ public class ConfigProperties {
             }
         }
     }
-    public static String getProperties(String key){
+
+    public static String getProperties(String key) {
         return properties.getProperty(key);
     }
 }

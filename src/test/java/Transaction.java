@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Transaction {
 
-    public String refactor(String amount, String debit) {
+    public String refactor(int amount, String debit) {
         String time = new Date().toString();
         SimpleDateFormat oldFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
         try {
